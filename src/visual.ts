@@ -215,7 +215,7 @@ export class Visual implements IVisual {
                         case 'Pie': {
                             console.log('Padding', this.settings.chartOptions.innerPadding);
                             spec.options = {
-                                legendPosition: Number(this.settings.chartOptions.legendPosition) || 1,
+                                legendPosition: this.settings.chartOptions.legendPosition || 1,
                                 innerRadius: (
                                             this.settings.chartOptions.innerPadding === 0
                                                 ?   0

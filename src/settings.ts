@@ -44,7 +44,7 @@ import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
     /** Provides mapping of the `options` object keys for chart types */
         export class ChartOptionSettings {
             public yTickCount: number = 3;
-            public legendPosition: string = 'upLeft';
+            public legendPosition: number = 1;
             public innerPadding: number = 50;
         }
 
