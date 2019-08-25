@@ -59,3 +59,18 @@ typings/
 
 # next.js build output
 .next
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+# Power BI Visuals-specific stuff
+
+.api/
+.tmp/
+dist/
+webpack*.html

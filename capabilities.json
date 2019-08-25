@@ -1,0 +1,136 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Category (Labels)",
+            "name": "category",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Measures (Datasets.Data)",
+            "name": "measure",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Legend (Datasets.Label)",
+            "name": "series",
+            "kind": "Grouping"
+        }
+    ],
+    "objects": {
+        "coreParameters": {
+            "displayName": "Core Parameters",
+            "properties": {
+                "chartType": {
+                    "displayName": "Chart Type",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Bar",
+                                "value": "Bar"
+                            },
+                            {
+                                "displayName": "Line",
+                                "value": "Line"
+                            },
+                            {
+                                "displayName": "Pie/Donut",
+                                "value": "Pie"
+                            }
+                        ]
+                    }
+                },
+                "showTitle": {
+                    "displayName": "Show Title",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "titleText": {
+                    "displayName": "Title",
+                    "type": {
+                        "text": true
+                    },
+                    "placeHolderText": "Enter Title"
+                },
+                "xLabel": {
+                    "displayName": "X-Label",
+                    "type": {
+                        "text": true
+                    },
+                    "placeHolderText": "Category"
+                },
+                "yLabel": {
+                    "displayName": "Y-Label",
+                    "type": {
+                        "text": true
+                    },
+                    "placeHolderText": "Measure"
+                }
+            }
+        },
+        "chartOptions": {
+            "displayName": "Chart Options",
+            "properties": {
+                "yTickCount": {
+                    "displayName": "Y Tick Count",
+                    "type": {
+                        "integer": true
+                    }
+                },
+                "legendPosition": {
+                    "displayName": "Legend Position",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Up Left",
+                                "value": "1"
+                            },
+                            {
+                                "displayName": "Up Right",
+                                "value": "2"
+                            }
+                        ]
+                    }
+                },
+                "innerPadding": {
+                    "displayName": "Inner Radius (%)",
+                    "type": {
+                        "integer": true
+                    }
+                }
+            }
+        }
+    },
+    "dataViewMappings": [
+        {
+            "conditions": [
+                { 
+                    "category": { 
+                        "max": 1 
+                    }, 
+                    "series": { 
+                        "max": 1 
+                    } 
+                }
+            ],
+            "categorical": {
+                "categories": {
+                    "for": {
+                        "in": "category"
+                    }
+                },
+                "values": {
+                    "group": {
+                        "by": "series",
+                        "select": [{
+                                "for": {
+                                    "in": "measure"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}
