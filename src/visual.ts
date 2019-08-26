@@ -46,7 +46,7 @@ import * as d3 from 'd3';
 import * as chartXkcd from 'chart.xkcd';
 import { IXkcdChartBase } from './interfaces';
 import { VisualSettings } from './settings';
-import { EPositionType } from './enums';
+import { EXYChartMappingType } from './enums';
 
 export class Visual implements IVisual {
     private target: HTMLElement;
@@ -136,8 +136,6 @@ export class Visual implements IVisual {
                 if (!dataViews
                     || !dataViews[0]
                     || !dataViews[0].categorical
-                    || !dataViews[0].categorical.categories
-                    || !dataViews[0].categorical.values
                     || !dataViews[0].metadata
                 ) {
                     console.log('Test 1 FAILED. Returning bare-minimum view model.');
@@ -157,14 +155,17 @@ export class Visual implements IVisual {
                     series = this.getDataRoleByName(metadata, 'series');
 
             /** Flags we can use in test 2 to define chart behaviour for spec */
-                let isCartesian: boolean;
+                let isCartesian: boolean,
+                    xyMappingType: EXYChartMappingType;
 
             /** Test 2: Data view mapping matches requirements for chart type
              *      Bar:    (1) 1 category and 1 measure; no series
              *      Pie:    (1) 1 category and 1 measure; no series
              *      Line:   (1) 1 category, 1 measure and 1 series
              *              (2) 1 category, >= 1 measure and no series
-             *      XY:     (1) 1 series, 2 measures
+             *      XY:     (1) 0 or 1 series, 2 measures
+             *              (2) 0 or 1 series, 1 measure, 1 grouping (in measure)
+             *              (3) 0 or 1 series, 2 groupings (in measure)
              *
              */
                 console.log('Test 2: Valid data roles for chart type...');
@@ -172,7 +173,7 @@ export class Visual implements IVisual {
                     case 'Bar': {
                         isCartesian = true;
                         switch (true) {
-                            case (categorical && measureCount === 1 && !series): {
+                            case (category && measureCount === 1 && !series): {
                                 console.log('Test 2 PASSED for Bar chart.');
                                 break;
                             }
@@ -185,7 +186,7 @@ export class Visual implements IVisual {
                     }
                     case 'Pie': {
                         switch (true) {
-                            case (categorical && measureCount === 1 && !series): {
+                            case (category && measureCount === 1 && !series): {
                                 console.log('Test 2 PASSED for Pie chart.');
                                 break;
                             }
@@ -199,14 +200,35 @@ export class Visual implements IVisual {
                     case 'Line': {
                         isCartesian = true;
                         switch (true) {
-                            case (categorical && measureCount === 1):
-                            case (categorical && series && measureCount === 1):
-                            case (categorical && !series && measureCount > 1): {
+                            case (category && measureCount === 1):
+                            case (category && series && measureCount === 1):
+                            case (category && !series && measureCount > 1): {
                                 console.log('Test 2 PASSED for Line chart.');
                                 break;
                             }
                             default: {
                                 console.log('Test 2 FAILED. Fields not valid for Line chart.');
+                                return;
+                            }
+                        }
+                        break;
+                    }
+                    case 'XY': {
+                        console.log('Measures', measureCount);
+                        isCartesian = true;
+                        switch (true) {
+                            case (!category && measureCount === 2): {
+                                xyMappingType = EXYChartMappingType.NoSeriesAndMeasures;
+                                console.log('Test 2 PASSED for XY chart - no series, 2 measures.');
+                                break;
+                            }
+                            case (!category && series && measureCount === 2): {
+                                xyMappingType = EXYChartMappingType.SeriesAndMeasures
+                                console.log('Test 2 PASSED for XY chart - 1 series, 2 measures.');
+                                break;
+                            }
+                            default: {
+                                console.log('Test 2 FAILED. Fields not valid for XY chart.');
                                 return;
                             }
                         }
@@ -277,6 +299,17 @@ export class Visual implements IVisual {
                                 };
                                 break;
                             }
+                            case 'XY': {
+                                spec.options = {
+                                    xTickCount: xTickCount,
+                                    yTickCount: yTickCount,
+                                    legendPosition: legendPosition,
+                                    showLine: showLine,
+                                    timeFormat: timeFormat,
+                                    dotSize: dotSize
+                                }
+                                break;
+                            }
                         }
 
                 /** Map data from `dataView` */
@@ -285,6 +318,7 @@ export class Visual implements IVisual {
                     switch (chartConfig.chartType) {
                         case 'Bar':
                         case 'Pie': {
+                            console.log(`${chartConfig.chartType}: mapping by category/measure`);
                             spec.data = {
                                 labels: catLabels,
                                 datasets: [
@@ -310,6 +344,9 @@ export class Visual implements IVisual {
                                 )
                             };
                             break;
+                        }
+                        case 'XY': {
+                            console.log(`XY chart: mapping by whatever crazy combination we're doing`);
                         }
                     }
 
@@ -348,7 +385,9 @@ export class Visual implements IVisual {
                 case 'chartOptions': {
                     /** Range validation on int fields */
                         instances[0].validValues = instances[0].validValues || {};
-                        instances[0].validValues.yTickCount = {
+                        instances[0].validValues.xTickCount =
+                        instances[0].validValues.yTickCount = 
+                        instances[0].validValues.dotSize = {
                             numberRange: {
                                 min: 1,
                                 max: 10
@@ -364,17 +403,32 @@ export class Visual implements IVisual {
                     /** Remove chart-type-specific options */
                         switch (this.settings.coreParameters.chartType) {
                             case 'Bar': {
+                                delete instances[0].properties['xTickCount'];
                                 delete instances[0].properties['legendPosition'];
                                 delete instances[0].properties['innerPadding'];
+                                delete instances[0].properties['showLine'];
+                                delete instances[0].properties['timeFormat'];
+                                delete instances[0].properties['dotSize'];
                                 break;
                             }
                             case 'Pie': {
+                                delete instances[0].properties['xTickCount'];
                                 delete instances[0].properties['yTickCount'];
+                                delete instances[0].properties['showLine'];
+                                delete instances[0].properties['timeFormat'];
+                                delete instances[0].properties['dotSize'];
                                 break;
                             }
                             case 'Line': {
+                                delete instances[0].properties['xTickCount'];
                                 delete instances[0].properties['innerPadding'];
+                                delete instances[0].properties['showLine'];
+                                delete instances[0].properties['timeFormat'];
+                                delete instances[0].properties['dotSize'];
                                 break;
+                            }
+                            case 'XY': {
+                                delete instances[0].properties['innerPadding'];
                             }
                         }
                 }
