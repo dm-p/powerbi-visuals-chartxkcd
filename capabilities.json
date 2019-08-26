@@ -8,7 +8,7 @@
         {
             "displayName": "Measures (Datasets.Data)",
             "name": "measure",
-            "kind": "Measure"
+            "kind": "GroupingOrMeasure"
         },
         {
             "displayName": "Legend (Datasets.Label)",
@@ -35,6 +35,10 @@
                             {
                                 "displayName": "Pie/Donut",
                                 "value": "Pie"
+                            },
+                            {
+                                "displayName": "XY",
+                                "value": "XY"
                             }
                         ]
                     }
@@ -71,6 +75,12 @@
         "chartOptions": {
             "displayName": "Chart Options",
             "properties": {
+                "xTickCount": {
+                    "displayName": "X Tick Count",
+                    "type": {
+                        "integer": true
+                    }
+                },
                 "yTickCount": {
                     "displayName": "Y Tick Count",
                     "type": {
@@ -90,6 +100,25 @@
                                 "value": "2"
                             }
                         ]
+                    }
+                },
+                "showLine": {
+                    "displayName": "Show Line",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "timeFormat": {
+                    "displayName": "Time Format",
+                    "type": {
+                        "text": true
+                    },
+                    "placeHolderText": "Valid dayjs time format"
+                },
+                "dotSize": {
+                    "displayName": "Dot Size",
+                    "type": {
+                        "integer": true
                     }
                 },
                 "innerPadding": {
