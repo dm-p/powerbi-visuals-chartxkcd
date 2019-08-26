@@ -27,7 +27,6 @@
 /**
  * TODO (general):
  *  - Remove `console.log` statements and add config for logging output
- *  - Add Line chart handling
  *  - Add XY chart handling
  */
 
@@ -83,6 +82,7 @@ export class Visual implements IVisual {
             /** Prep spec and target node for plot */
                 let spec = this.mapSpec(options),
                     svg = this.svgNode.node();
+                console.log('Spec', spec);
 
             /** Call appropriate plot functionbased on chart type */
                 switch (this.settings.coreParameters.chartType) {
@@ -94,13 +94,16 @@ export class Visual implements IVisual {
                         new chartXkcd.Pie(svg, spec);
                         break;
                     }
+                    case 'Line': {
+                        new chartXkcd.Line(svg, spec);
+                    }
                 }
 
             console.log('Done!');
         }
 
     /**
-     * Looks in the `dataView` columns list for the specified role name. If found, returns the object; null if not found.
+     * Looks in the `dataView` columns list for the specified role name. If found, returns the object if one found; null if not found.
      *
      * @param dataViewColumns   Array of `DataViewMetaDataColumn`s to inspect
      * @param dataRole          Name of role being searched for
@@ -144,9 +147,13 @@ export class Visual implements IVisual {
             /** Obtain data view objects so we can test for correct fields */
                 let metadata = dataViews[0].metadata.columns,
                     categorical = dataViews[0].categorical,
+                    measures = metadata.filter((col) =>
+                                col.roles['measure']
+                            &&  !col.groupName
+                        ),
+                    measureCount = measures.length,
                     category = this.getDataRoleByName(metadata, 'category'),
-                    measure = this.getDataRoleByName(metadata, 'measure');
-                    /** TODO: # of measures */
+                    series = this.getDataRoleByName(metadata, 'series');
 
             /** Flags we can use in test 2 to define chart behaviour for spec */
                 let isCartesian: boolean;
@@ -163,19 +170,45 @@ export class Visual implements IVisual {
                 switch (this.settings.coreParameters.chartType) {
                     case 'Bar': {
                         isCartesian = true;
-                        if (!(categorical && measure)) {
-                            console.log('Test 2 FAILED. Fields not valid for Bar chart.');
-                            return;
+                        switch (true) {
+                            case (categorical && measureCount === 1 && !series): {
+                                console.log('Test 2 PASSED for Bar chart.');
+                                break;
+                            }
+                            default: {
+                                console.log('Test 2 FAILED. Fields not valid for Bar chart.');
+                                return;
+                            }
                         }
-                        console.log('Test 2 PASSED for Bar chart.');
                         break;
                     }
                     case 'Pie': {
-                        if (!(categorical && measure)) {
-                            console.log('Test 2 FAILED. Fields not valid for Pie chart.');
-                            return;
+                        switch (true) {
+                            case (categorical && measureCount === 1 && !series): {
+                                console.log('Test 2 PASSED for Pie chart.');
+                                break;
+                            }
+                            default: {
+                                console.log('Test 2 FAILED. Fields not valid for Pie chart.');
+                                return;
+                            }
                         }
-                        console.log('Test 2 PASSED for Pie chart.');
+                        break;
+                    }
+                    case 'Line': {
+                        isCartesian = true;
+                        switch (true) {
+                            case (categorical && measureCount === 1):
+                            case (categorical && series && measureCount === 1):
+                            case (categorical && !series && measureCount > 1): {
+                                console.log('Test 2 PASSED for Line chart.');
+                                break;
+                            }
+                            default: {
+                                console.log('Test 2 FAILED. Fields not valid for Line chart.');
+                                return;
+                            }
+                        }
                         break;
                     }
                 }
@@ -199,41 +232,56 @@ export class Visual implements IVisual {
                                 :   '';
                         spec.yLabel = chartConfig.yLabel
                             ?   chartConfig.yLabel
-                                :   measure
-                                    ?   measure.displayName
+                                :   measures && measureCount >= 1
+                                    ?   measures[0].displayName
                                     :   '';
                     }
 
                 /** Map options */
-                    switch (chartConfig.chartType) {
-                        case 'Bar': {
-                            spec.options = {
-                                yTickCount: this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].yTickCount
-                            };
-                            break;
+
+                    /** Resolve as generically as possible to avoid repeating logic i nthe `switch` below */
+                        console.log('Resolving options...');
+                        let legendPosition = this.settings.chartOptions.legendPosition || 1,
+                            yTickCount = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].yTickCount,
+                            innerRadius = (
+                                    this.settings.chartOptions.innerPadding === 0
+                                        ?   0
+                                        :       this.settings.chartOptions.innerPadding
+                                            ||  VisualSettings.getDefault()['chartOptions'].innerPadding
+                                ) / 100;
+
+                    /** Add in options as needed */
+                        console.log('Mapping options...');
+                        switch (chartConfig.chartType) {
+                            case 'Bar': {
+                                spec.options = {
+                                    yTickCount: yTickCount
+                                };
+                                break;
+                            }
+                            case 'Pie': {
+                                spec.options = {
+                                    legendPosition: legendPosition,
+                                    innerRadius: innerRadius
+                                };
+                            }
+                            case 'Line': {
+                                spec.options = {
+                                    yTickCount: yTickCount,
+                                    legendPosition: legendPosition
+                                };
+                                break;
+                            }
                         }
-                        case 'Pie': {
-                            console.log('Padding', this.settings.chartOptions.innerPadding);
-                            spec.options = {
-                                legendPosition: this.settings.chartOptions.legendPosition || 1,
-                                innerRadius: (
-                                            this.settings.chartOptions.innerPadding === 0
-                                                ?   0
-                                                :       this.settings.chartOptions.innerPadding
-                                                    ||  VisualSettings.getDefault()['chartOptions'].innerPadding
-                                    ) / 100
-                            };
-                        }
-                    }
 
                 /** Map data from `dataView` */
+                    console.log('Mapping data...');
+                    let catLabels = categorical.categories[0].values.map((v) => v.toString());
                     switch (chartConfig.chartType) {
                         case 'Bar':
                         case 'Pie': {
                             spec.data = {
-                                labels: categorical.categories[0].values.map((v) => {
-                                    return v.toString();
-                                }),
+                                labels: catLabels,
                                 datasets: [
                                     {
                                         data: categorical.values[0].values.map((v) => {
@@ -241,6 +289,20 @@ export class Visual implements IVisual {
                                         })
                                     }
                                 ]
+                            };
+                            break;
+                        }
+                        case 'Line': {
+                            console.log(`Line chart: mapping by ${series ? 'series' : 'measure'}...`);
+                            spec.data = {
+                                labels: catLabels,
+                                datasets: categorical.values.map((v) => ({
+                                        label: series
+                                            ?   v.source.groupName.toString()
+                                            :   v.source.displayName.toString(),
+                                        data: <number[]>v.values
+                                    })
+                                )
                             };
                             break;
                         }
@@ -258,58 +320,62 @@ export class Visual implements IVisual {
      * objects and properties you want to expose to the users in the property pane.
      *
      */
-    public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstance[] {
-        const instances: VisualObjectInstance[] = (VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options) as VisualObjectInstanceEnumerationObject).instances;
-        let objectName = options.objectName;
+        public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstance[] {
+            const instances: VisualObjectInstance[] = (VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options) as VisualObjectInstanceEnumerationObject).instances;
+            let objectName = options.objectName;
 
-        switch (objectName) {
+            switch (objectName) {
 
-            case 'coreParameters': {
-                if (!this.settings.coreParameters.showTitle) {
-                    delete instances[0].properties['titleText'];
-                }
-                switch (this.settings.coreParameters.chartType) {
-                    case 'Pie': {
-                        delete instances[0].properties['xLabel'];
-                        delete instances[0].properties['yLabel'];
+                case 'coreParameters': {
+                    if (!this.settings.coreParameters.showTitle) {
+                        delete instances[0].properties['titleText'];
+                    }
+                    switch (this.settings.coreParameters.chartType) {
+                        case 'Pie': {
+                            delete instances[0].properties['xLabel'];
+                            delete instances[0].properties['yLabel'];
+                        }
+                        break;
                     }
                     break;
                 }
-                break;
+
+                case 'chartOptions': {
+                    /** Range validation on int fields */
+                        instances[0].validValues = instances[0].validValues || {};
+                        instances[0].validValues.yTickCount = {
+                            numberRange: {
+                                min: 1,
+                                max: 10
+                            }
+                        };
+                        instances[0].validValues.innerPadding = {
+                            numberRange: {
+                                min: 0,
+                                max: 100
+                            }
+                        };
+
+                    /** Remove chart-type-specific options */
+                        switch (this.settings.coreParameters.chartType) {
+                            case 'Bar': {
+                                delete instances[0].properties['legendPosition'];
+                                delete instances[0].properties['innerPadding'];
+                                break;
+                            }
+                            case 'Pie': {
+                                delete instances[0].properties['yTickCount'];
+                                break;
+                            }
+                            case 'Line': {
+                                delete instances[0].properties['innerPadding'];
+                                break;
+                            }
+                        }
+                }
+
             }
 
-            case 'chartOptions': {
-                /** Range validation on int fields */
-                    instances[0].validValues = instances[0].validValues || {};
-                    instances[0].validValues.yTickCount = {
-                        numberRange: {
-                            min: 1,
-                            max: 10
-                        }
-                    };
-                    instances[0].validValues.innerPadding = {
-                        numberRange: {
-                            min: 0,
-                            max: 100
-                        }
-                    };
-
-                /** Remove chart-type-specific options */
-                    switch (this.settings.coreParameters.chartType) {
-                        case 'Bar': {
-                            delete instances[0].properties['legendPosition'];
-                            delete instances[0].properties['innerPadding'];
-                            break;
-                        }
-                        case 'Pie': {
-                            delete instances[0].properties['yTickCount'];
-                            break;
-                        }
-                    }
-            }
-
+            return instances;
         }
-
-        return instances;
-    }
 }
