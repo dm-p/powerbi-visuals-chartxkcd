@@ -291,6 +291,7 @@ export class Visual implements IVisual {
                                     legendPosition: legendPosition,
                                     innerRadius: innerRadius
                                 };
+                                break;
                             }
                             case 'Line': {
                                 spec.options = {

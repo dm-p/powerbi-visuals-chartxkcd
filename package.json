@@ -9,7 +9,7 @@
     "dependencies": {
         "@babel/runtime": "^7.5.5",
         "@babel/runtime-corejs2": "^7.5.5",
-        "chart.xkcd": "^1.0.7",
+        "chart.xkcd": "^1.0.8",
         "core-js": "3.2.1",
         "d3": "5.10.0",
         "powerbi-visuals-api": "~2.6.1",
