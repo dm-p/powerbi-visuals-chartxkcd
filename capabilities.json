@@ -142,23 +142,25 @@
                     } 
                 }
             ],
-            "categorical": {
-                "categories": {
+            "matrix": {
+                "rows": {
                     "for": {
                         "in": "category"
-                    }                    
+                    }   
+                },
+                "columns": {
+                    "for": {
+                        "in": "series"
+                    }
                 },
                 "values": {
-                    "group": {
-                        "by": "series",
-                        "select": [
-                            {
-                                "bind": {
-                                    "to": "measure"
-                                }
+                    "select": [
+                        {
+                            "for": {
+                                "in": "measure"
                             }
-                        ]
-                    }
+                        }
+                    ]
                 }
             }
         }

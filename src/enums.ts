@@ -34,7 +34,7 @@
         downRight = 4
     }
 
-/** 
+/**
  * Handles data mapping rules for XY chart
  */
     export enum EXYChartMappingType {

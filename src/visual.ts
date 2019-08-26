@@ -29,6 +29,7 @@
  *  - Remove `console.log` statements and add config for logging output
  *  - Add test fail results to view model so that user can understand why they don't plot
  *  - Add XY chart handling
+ *  - valueFormatter checks/fixes
  */
 
 import 'core-js/stable';
@@ -135,7 +136,7 @@ export class Visual implements IVisual {
                 console.log('Test 1: Valid data view...');
                 if (!dataViews
                     || !dataViews[0]
-                    || !dataViews[0].categorical
+                    || !dataViews[0].matrix
                     || !dataViews[0].metadata
                 ) {
                     console.log('Test 1 FAILED. Returning bare-minimum view model.');
@@ -145,11 +146,8 @@ export class Visual implements IVisual {
 
             /** Obtain data view objects so we can test for correct fields */
                 let metadata = dataViews[0].metadata.columns,
-                    categorical = dataViews[0].categorical,
-                    measures = metadata.filter((col) =>
-                                col.roles['measure']
-                            &&  !col.groupName
-                        ),
+                    matrix = dataViews[0].matrix,
+                    measures = matrix.valueSources,
                     measureCount = measures.length,
                     category = this.getDataRoleByName(metadata, 'category'),
                     series = this.getDataRoleByName(metadata, 'series');
@@ -223,7 +221,7 @@ export class Visual implements IVisual {
                                 break;
                             }
                             case (!category && series && measureCount === 2): {
-                                xyMappingType = EXYChartMappingType.SeriesAndMeasures
+                                xyMappingType = EXYChartMappingType.SeriesAndMeasures;
                                 console.log('Test 2 PASSED for XY chart - 1 series, 2 measures.');
                                 break;
                             }
@@ -308,14 +306,14 @@ export class Visual implements IVisual {
                                     showLine: showLine,
                                     timeFormat: timeFormat,
                                     dotSize: dotSize
-                                }
+                                };
                                 break;
                             }
                         }
 
                 /** Map data from `dataView` */
                     console.log('Mapping data...');
-                    let catLabels = categorical.categories[0].values.map((v) => v.toString());
+                    let catLabels = matrix.rows.root.children.map((c) => c.value.toString());
                     switch (chartConfig.chartType) {
                         case 'Bar':
                         case 'Pie': {
@@ -324,8 +322,8 @@ export class Visual implements IVisual {
                                 labels: catLabels,
                                 datasets: [
                                     {
-                                        data: categorical.values[0].values.map((v) => {
-                                            return <number>v;
+                                        data: matrix.rows.root.children.map((c) => {
+                                            return <number>c.values[0].value;
                                         })
                                     }
                                 ]
@@ -336,18 +334,27 @@ export class Visual implements IVisual {
                             console.log(`Line chart: mapping by ${series ? 'series' : 'measure'}...`);
                             spec.data = {
                                 labels: catLabels,
-                                datasets: categorical.values.map((v) => ({
-                                        label: series
-                                            ?   v.source.groupName.toString()
-                                            :   v.source.displayName.toString(),
-                                        data: <number[]>v.values
-                                    })
-                                )
+                                datasets: series
+                                    ?   matrix.columns.root.children.map((c, ci) =>({
+                                                label: c.value.toString(),
+                                                data: matrix.rows.root.children.map((r) => 
+                                                        <number>r.values[ci].value
+                                                    )
+                                            })
+                                        )
+                                    :   measures.map((m, mi) => ({
+                                                label: m.displayName,
+                                                data: matrix.rows.root.children.map((r) => 
+                                                    <number>r.values[mi].value
+                                                )
+                                            })
+                                        )
                             };
                             break;
                         }
                         case 'XY': {
                             console.log(`XY chart: mapping by whatever crazy combination we're doing`);
+                            break;
                         }
                     }
 
@@ -387,7 +394,7 @@ export class Visual implements IVisual {
                     /** Range validation on int fields */
                         instances[0].validValues = instances[0].validValues || {};
                         instances[0].validValues.xTickCount =
-                        instances[0].validValues.yTickCount = 
+                        instances[0].validValues.yTickCount =
                         instances[0].validValues.dotSize = {
                             numberRange: {
                                 min: 1,
