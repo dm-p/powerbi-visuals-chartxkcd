@@ -25,8 +25,9 @@
 */
 
 /**
- * TODO (general):
+ * TODO: (general):
  *  - Remove `console.log` statements and add config for logging output
+ *  - Add test fail results to view model so that user can understand why they don't plot
  *  - Add XY chart handling
  */
 
@@ -241,8 +242,12 @@ export class Visual implements IVisual {
 
                     /** Resolve as generically as possible to avoid repeating logic i nthe `switch` below */
                         console.log('Resolving options...');
-                        let legendPosition = this.settings.chartOptions.legendPosition || 1,
+                        let xTickCount = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].xTickCount,
                             yTickCount = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].yTickCount,
+                            legendPosition = this.settings.chartOptions.legendPosition || 1,
+                            showLine = this.settings.chartOptions.showLine,
+                            timeFormat = this.settings.chartOptions.timeFormat,
+                            dotSize = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].dotSize,
                             innerRadius = (
                                     this.settings.chartOptions.innerPadding === 0
                                         ?   0

@@ -47,7 +47,7 @@ import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
             public yTickCount: number = 3;
             public legendPosition: number = 1;
             public showLine: boolean = false;
-            public timeFormat: string = null;
+            public timeFormat: string = undefined;
             public dotSize: number = 1;
             public innerPadding: number = 50;
         }

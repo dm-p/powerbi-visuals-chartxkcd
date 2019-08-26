@@ -41,8 +41,12 @@ import { EPositionType } from './enums';
  * Interface to manage the mapping of the `options` object keys/values
  */
     export interface IXkcdChartOptions {
+        xTickCount?: number;
         yTickCount?: number;
         legendPosition?: EPositionType;
+        showLine?: boolean;
+        timeFormat?: string;
+        dotSize?: number;
         innerRadius?: number;
     }
 
