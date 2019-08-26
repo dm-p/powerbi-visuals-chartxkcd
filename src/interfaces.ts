@@ -24,7 +24,7 @@
 *  THE SOFTWARE.
 */
 
-import { EPositionType } from './enums'
+import { EPositionType } from './enums';
 
 /**
  * Simple interface to manage the overall xkcd.chart 'spec'
