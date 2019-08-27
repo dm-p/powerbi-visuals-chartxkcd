@@ -63,5 +63,10 @@ import { EPositionType } from './enums';
  */
     export interface IXkcdChartDataSet {
         label?: string;
-        data: number[];
+        data: number[] | IXkcdChartDataSetXY[];
+    }
+
+    export interface IXkcdChartDataSetXY {
+        x: number,
+        y: number;
     }

@@ -3,12 +3,12 @@
         {
             "displayName": "Category (Labels)",
             "name": "category",
-            "kind": "Grouping"
+            "kind": "GroupingOrMeasure"
         },
         {
             "displayName": "Measures (Datasets.Data)",
             "name": "measure",
-            "kind": "GroupingOrMeasure"
+            "kind": "Measure"
         },
         {
             "displayName": "Legend (Datasets.Label)",

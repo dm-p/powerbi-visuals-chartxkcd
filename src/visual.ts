@@ -45,7 +45,7 @@ import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnume
 import DataViewMetadataColumn = powerbi.DataViewMetadataColumn;
 import * as d3 from 'd3';
 import * as chartXkcd from 'chart.xkcd';
-import { IXkcdChartBase } from './interfaces';
+import { IXkcdChartBase, IXkcdChartDataSetXY } from './interfaces';
 import { VisualSettings } from './settings';
 import { EXYChartMappingType } from './enums';
 
@@ -98,6 +98,9 @@ export class Visual implements IVisual {
                     }
                     case 'Line': {
                         new chartXkcd.Line(svg, spec);
+                    }
+                    case 'XY': {
+                        new chartXkcd.XY(svg, spec);
                     }
                 }
 
@@ -161,9 +164,8 @@ export class Visual implements IVisual {
              *      Pie:    (1) 1 category and 1 measure; no series
              *      Line:   (1) 1 category, 1 measure and 1 series
              *              (2) 1 category, >= 1 measure and no series
-             *      XY:     (1) 0 or 1 series, 2 measures
-             *              (2) 0 or 1 series, 1 measure, 1 grouping (in measure)
-             *              (3) 0 or 1 series, 2 groupings (in measure)
+             *      XY:     (1) category must be numeric or dateTime
+             *              (2) 1 category, 1 measure, 0-1 series
              *
              */
                 console.log('Test 2: Valid data roles for chart type...');
@@ -171,7 +173,7 @@ export class Visual implements IVisual {
                     case 'Bar': {
                         isCartesian = true;
                         switch (true) {
-                            case (category && measureCount === 1 && !series): {
+                            case    (category && measureCount === 1 && !series): {
                                 console.log('Test 2 PASSED for Bar chart.');
                                 break;
                             }
@@ -184,7 +186,7 @@ export class Visual implements IVisual {
                     }
                     case 'Pie': {
                         switch (true) {
-                            case (category && measureCount === 1 && !series): {
+                            case    (category && measureCount === 1 && !series): {
                                 console.log('Test 2 PASSED for Pie chart.');
                                 break;
                             }
@@ -198,9 +200,9 @@ export class Visual implements IVisual {
                     case 'Line': {
                         isCartesian = true;
                         switch (true) {
-                            case (category && measureCount === 1):
-                            case (category && series && measureCount === 1):
-                            case (category && !series && measureCount > 1): {
+                            case    (category && measureCount === 1):
+                            case    (category && series && measureCount === 1):
+                            case    (category && !series && measureCount > 1): {
                                 console.log('Test 2 PASSED for Line chart.');
                                 break;
                             }
@@ -215,18 +217,13 @@ export class Visual implements IVisual {
                         console.log('Measures', measureCount);
                         isCartesian = true;
                         switch (true) {
-                            case (!category && measureCount === 2): {
-                                xyMappingType = EXYChartMappingType.NoSeriesAndMeasures;
-                                console.log('Test 2 PASSED for XY chart - no series, 2 measures.');
-                                break;
-                            }
-                            case (!category && series && measureCount === 2): {
-                                xyMappingType = EXYChartMappingType.SeriesAndMeasures;
-                                console.log('Test 2 PASSED for XY chart - 1 series, 2 measures.');
+                            case    (category.type.numeric || category.type.dateTime)
+                                &&  (category && measureCount === 1): {
+                                console.log('Test 2 PASSED for XY chart.');
                                 break;
                             }
                             default: {
-                                console.log('Test 2 FAILED. Fields not valid for XY chart.');
+                                console.log('Test 2 FAILED. Invalid category type supplied for XY chart.');
                                 return;
                             }
                         }
@@ -262,12 +259,12 @@ export class Visual implements IVisual {
 
                     /** Resolve as generically as possible to avoid repeating logic i nthe `switch` below */
                         console.log('Resolving options...');
-                        let xTickCount = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].xTickCount,
+                        let xTickCount = this.settings.chartOptions.xTickCount || VisualSettings.getDefault()['chartOptions'].xTickCount,
                             yTickCount = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].yTickCount,
                             legendPosition = this.settings.chartOptions.legendPosition || 1,
                             showLine = this.settings.chartOptions.showLine,
                             timeFormat = this.settings.chartOptions.timeFormat,
-                            dotSize = this.settings.chartOptions.yTickCount || VisualSettings.getDefault()['chartOptions'].dotSize,
+                            dotSize = this.settings.chartOptions.dotSize || VisualSettings.getDefault()['chartOptions'].dotSize,
                             innerRadius = (
                                     this.settings.chartOptions.innerPadding === 0
                                         ?   0
@@ -353,7 +350,20 @@ export class Visual implements IVisual {
                             break;
                         }
                         case 'XY': {
-                            console.log(`XY chart: mapping by whatever crazy combination we're doing`);
+                            console.log(`XY chart: mapping by category/measure/series...`);
+                            spec.data = {
+                                datasets: series
+                                    ?   matrix.columns.root.children.map((c, ci) =>({
+                                        label: c.value.toString(),
+                                        data: <IXkcdChartDataSetXY[]>matrix.rows.root.children.map((r) => ({
+                                                        x: <number>r.value,
+                                                        y: <number>r.values[ci].value
+                                                    })
+                                                )
+                                            })
+                                        )
+                                    :   []
+                            }
                             break;
                         }
                     }
