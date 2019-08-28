@@ -473,10 +473,11 @@
                             }
                             case 'XY': {
                                 debug.log(`XY chart: mapping by category/measure/series...`);
-                                debug.log(category);
-                                viewModel.spec.data = {
-                                    datasets: series
-                                        ?   matrix.columns.root.children.map((c, ci) =>
+                                switch (xyMappingType) {
+                                    case EXYChartMappingType.CatMeasureSeries: {
+                                        debug.log('Mapping by series...');
+                                        viewModel.spec.data = {
+                                            datasets: matrix.columns.root.children.map((c, ci) =>
                                                 ({
                                                     label: c.value.toString(),
                                                     data: <IXkcdChartDataSetXY[]>matrix.rows.root.children.map((r) => ({
@@ -486,7 +487,13 @@
                                                         ).filter((d) => d.y !== null)
                                                 })
                                             )
-                                        :   measures.map((m, mi) =>
+                                        };
+                                        break;
+                                    }
+                                    case EXYChartMappingType.CatMeasures: {
+                                        debug.log('Mapping by measures...');
+                                        viewModel.spec.data = {
+                                            datasets: measures.map((m, mi) =>
                                                 ({
                                                     label: m.displayName,
                                                     data: <IXkcdChartDataSetXY[]>matrix.rows.root.children.map((r) => ({
@@ -496,7 +503,15 @@
                                                         ).filter((d) => d.y !== null)
                                                 })
                                             )
-                                };
+                                        };
+                                        break;
+                                    }
+                                    case EXYChartMappingType.CatMeasureCat: {
+                                        debug.log('Mapping by category and categorical measure...');
+                                        /** TODO: This situation has cartesian product of category x measure in matrix.rows.root.children[].levelValues[] and will need to be grouped/managed */
+                                        break;
+                                    }
+                                }
                                 break;
                             }
                         }
