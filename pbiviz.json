@@ -1,10 +1,10 @@
 {
     "visual": {
         "name": "chartXkcd",
-        "displayName": "chart.xkcd for Power BI (1.0.8.0)",
+        "displayName": "chart.xkcd for Power BI (1.0.0.0)",
         "guid": "chartXkcd32FC84B3628540DDAA713E329738A6A0",
         "visualClassName": "Visual",
-        "version": "1.0.8.0",
+        "version": "1.0.0.0",
         "description": "Wraps the chart.xkcd library functions into a Power BI custom visual.",
         "supportUrl": "https://github.com/dm-p/powerbi-visuals-chartxkcd",
         "gitHubUrl": "https://github.com/dm-p/powerbi-visuals-chartxkcd"

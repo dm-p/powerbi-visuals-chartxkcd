@@ -24,13 +24,25 @@
 *  THE SOFTWARE.
 */
 
-import { dataViewObjectsParser } from 'powerbi-visuals-utils-dataviewutils';
-import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
+/** Power BI API references */
+    import { dataViewObjectsParser } from 'powerbi-visuals-utils-dataviewutils';
+    import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 
-    export class VisualSettings extends DataViewObjectsParser {
-        public coreParameters: CoreParameterSettings = new CoreParameterSettings();
-        public chartOptions: ChartOptionSettings = new ChartOptionSettings();
-    }
+/** Internal references */
+    import {
+        VISUAL_NAME,
+        VISUAL_VERSION,
+        VISUAL_CHARTXKCD_VERSION,
+        VISUAL_USAGE_URL,
+        VISUAL_NON_PRODUCTION
+    } from './constants';
+
+    /** Provides all visual property settings and defaults */
+        export class VisualSettings extends DataViewObjectsParser {
+            public coreParameters: CoreParameterSettings = new CoreParameterSettings();
+            public chartOptions: ChartOptionSettings = new ChartOptionSettings();
+            public about: AboutSettings = new AboutSettings();
+        }
 
     /** Provides mapping of core parameters for chart.xkcd */
         export class CoreParameterSettings {
@@ -51,4 +63,24 @@ import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
             public dotSize: number = 1;
             public innerPadding: number = 50;
         }
+
+    /** Used to hold about info and manage debugging */
+        export class AboutSettings {
+            /** Name of visual */
+                public visualName: string = VISUAL_NAME;
+            /** Visual version */
+                public version: string = VISUAL_VERSION;
+            /** chart.Xckd library version */
+                public chartXkcdVersion: string = VISUAL_CHARTXKCD_VERSION;
+            /** Indicates whether debug mode is enabled or not */
+                public debugMode: boolean = false;
+            /** Indicates that visual update events should be debugged */
+                public debugVisualUpdate: boolean = false;
+            /** Indicates that visual property events should be debugged */
+                public debugProperties: boolean = false;
+            /** Indicates that visual is in a development (non-production) state */
+                public development: boolean = VISUAL_NON_PRODUCTION;
+            /** URL for help/usage instructions */
+                public usageUrl: string = VISUAL_USAGE_URL;
+        }    
 

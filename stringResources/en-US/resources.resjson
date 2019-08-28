@@ -1,0 +1,16 @@
+{
+    "Objects_About": "About",
+    "Objects_About_Description": "Information about this custom visual",
+    "Objects_About_VisualName": "Visual Name",
+    "Objects_About_VisualName_Description": "The name of the custom visual.",
+    "Objects_About_Version": "Version",
+    "Objects_About_Version_Description": "Release version number.",
+    "Objects_About_ChartXkcdVersion": "chart.Xkcd Version",
+    "Objects_About_ChartXkcdVersion_Description": "Version of chart.xkcd packaged with this version of the visual.",
+    "Objects_About_DebugMode": "Debug",
+    "Objects_About_DebugMode_Description": "Enable/disable debugging.",
+    "Objects_About_DebugVisualUpdate": "Visual Update",
+    "Objects_About_DebugVisualUpdate_Description": "Enable/disable debugging of visual update events.",
+    "Objects_About_DebugProperties": "Properties",
+    "Objects_About_DebugProperties_Description": "Enable/disable debugging of property change events and values."
+}

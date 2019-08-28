@@ -66,6 +66,7 @@ export class Visual implements IVisual {
             .append('svg')
             .classed('xkcd', true);
         }
+    import ILocalizationManager = powerbi.extensibility.ILocalizationManager;
 
     /**
      * Runs when visual is updated
@@ -175,6 +176,9 @@ export class Visual implements IVisual {
                         switch (true) {
                             case    (category && measureCount === 1 && !series): {
                                 console.log('Test 2 PASSED for Bar chart.');
+        /** Handle localisation of visual text */
+            private localisationManager: ILocalizationManager;
+                this.localisationManager = options.host.createLocalizationManager();
                                 break;
                             }
                             default: {

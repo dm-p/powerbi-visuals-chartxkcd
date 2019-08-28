@@ -128,6 +128,68 @@
                     }
                 }
             }
+        },
+        "about": {
+            "displayNameKey": "Objects_About",
+            "descriptionKey": "Objects_About_Description",
+            "displayName": "About",
+            "description": "About description.",
+            "properties": {
+                "visualName": {
+                    "displayNameKey": "Objects_About_VisualName",
+                    "descriptionKey": "Objects_About_VisualName_Description",
+                    "displayName": "Visual Name",
+                    "description": "Visual Name description.",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "version": {
+                    "displayNameKey": "Objects_About_Version",
+                    "descriptionKey": "Objects_About_Version_Description",
+                    "displayName": "Version",
+                    "description": "Version description.",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "chartXkcdVersion": {
+                    "displayNameKey": "Objects_About_ChartXkcdVersion",
+                    "descriptionKey": "Objects_About_ChartXkcdVersion_Description",
+                    "displayName": "chart.Xkcd Version",
+                    "description": "chart.Xkcd Version description.",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "debugMode": {
+                    "displayNameKey": "Objects_About_DebugMode",
+                    "descriptionKey": "Objects_About_DebugMode_Description",
+                    "displayName": "Debug",
+                    "description": "Debug description.",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "debugVisualUpdate": {
+                    "displayNameKey": "Objects_About_DebugVisualUpdate",
+                    "descriptionKey": "Objects_About_DebugVisualUpdate_Description",
+                    "displayName": "Visual Update",
+                    "description": "Visual Update description.",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "debugProperties": {
+                    "displayNameKey": "Objects_About_DebugProperties",
+                    "descriptionKey": "Objects_About_DebugProperties_Description",
+                    "displayName": "Properties",
+                    "description": "Properties description.",
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
         }
     },
     "dataViewMappings": [
