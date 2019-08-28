@@ -41,6 +41,15 @@ As at this time the visual supports all types available in version 1.0.9 of char
 * Chart Options - provides properties that drive the chart-specific options.
 * About - provides version info (+ version of chart.xkcd packaged with the visual)
 
+## Supported Chart Types
+
+Select the **Chart Type** from the **Core Parameters** property menu. Supported charts are:
+
+* [Bar Chart](https://timqian.com/chart.xkcd/#bar_chart)
+* [Pie/Donut Chart](https://timqian.com/chart.xkcd/#pie_doughnut_chart)
+* [Line Chart](https://timqian.com/chart.xkcd/#line_chart)
+* [XY Chart](https://timqian.com/chart.xkcd/#xy_chart)
+
 ## Data Roles (Fields)
 
 The visual has 3 data roles (field "buckets"). Because each chart type has specific behaviour, the visual provides a "best-fit" for each configuration and each chart type will document the "correct" usage of these to produce desired results. A rule-of-thumb is as follows:
@@ -50,15 +59,6 @@ The visual has 3 data roles (field "buckets"). Because each chart type has speci
 * **Legend** - synonymous with the `data` attribute of the `dataset` object.
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
-
-## Supported Chart Types
-
-Select the **Chart Type** from the **Core Parameters** property menu. Supported charts are:
-
-* [Bar Chart](https://timqian.com/chart.xkcd/#bar_chart)
-* [Pie/Donut Chart](https://timqian.com/chart.xkcd/#pie_doughnut_chart)
-* [Line Chart](https://timqian.com/chart.xkcd/#line_chart)
-* [XY Chart](https://timqian.com/chart.xkcd/#xy_chart)
 
 ## Core Parameters
 
