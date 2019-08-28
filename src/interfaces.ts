@@ -27,9 +27,25 @@
 import { EPositionType } from './enums';
 
 /**
+ * Main view model for visual
+ */
+    export interface IViewModel {
+        spec: IXkcdChartSpec;
+        testResult: ISpecTestResults;
+    }
+
+/**
+ * Contains results of dataRoles/dataView tests and details of reason(s) test fails
+ */
+    export interface ISpecTestResults {
+        result: boolean;
+        messages: string[];
+    }
+
+/**
  * Simple interface to manage the overall xkcd.chart 'spec'
  */
-    export interface IXkcdChartBase {
+    export interface IXkcdChartSpec {
         title?: string;
         xLabel?: string;
         yLabel?: string;
@@ -66,7 +82,10 @@ import { EPositionType } from './enums';
         data: number[] | IXkcdChartDataSetXY[];
     }
 
+/**
+ * Manages data points for XY chart, as they differ to others
+ */
     export interface IXkcdChartDataSetXY {
-        x: number,
+        x: number | Date;
         y: number;
     }

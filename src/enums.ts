@@ -38,6 +38,7 @@
  * Handles data mapping rules for XY chart
  */
     export enum EXYChartMappingType {
-        NoSeriesAndMeasures = 0,
-        SeriesAndMeasures = 1
+        CatMeasures = 0,
+        CatMeasureSeries = 1,
+        CatMeasureCat = 2
     }

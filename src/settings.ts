@@ -59,7 +59,7 @@
             public yTickCount: number = 3;
             public legendPosition: number = 1;
             public showLine: boolean = false;
-            public timeFormat: string = undefined;
+            public timeFormat: string = 'MM/DD/YYYY';
             public dotSize: number = 1;
             public innerPadding: number = 50;
         }
@@ -82,5 +82,4 @@
                 public development: boolean = VISUAL_NON_PRODUCTION;
             /** URL for help/usage instructions */
                 public usageUrl: string = VISUAL_USAGE_URL;
-        }    
-
+        }
