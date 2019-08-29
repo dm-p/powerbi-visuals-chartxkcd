@@ -1,42 +1,61 @@
 {
     "dataRoles": [
         {
+            "displayNameKey": "Roles_Category",
+            "descriptionKey": "Roles_Category_Description",
             "displayName": "Category (Labels)",
+            "description": "Category description.",
             "name": "category",
             "kind": "GroupingOrMeasure"
         },
         {
-            "displayName": "Measures (Datasets.Data)",
+            "displayNameKey": "Roles_Measure",
+            "descriptionKey": "Roles_Measure_Description",
+            "displayName": "Measures",
+            "description": "Measures description.",
             "name": "measure",
             "kind": "GroupingOrMeasure"
         },
         {
-            "displayName": "Legend (Datasets.Label)",
+            "displayNameKey": "Roles_Series",
+            "descriptionKey": "Roles_Series_Description",
+            "displayName": "Series",
+            "description": "Series description.",
             "name": "series",
             "kind": "Grouping"
         }
     ],
     "objects": {
         "coreParameters": {
+            "displayNameKey": "Objects_CoreParameters",
+            "descriptionKey": "Objects_CoreParameters_Description",
             "displayName": "Core Parameters",
+            "description": "Core Parameters description.",
             "properties": {
                 "chartType": {
+                    "displayNameKey": "Objects_CoreParameters_ChartType",
+                    "descriptionKey": "Objects_CoreParameters_ChartType_Description",
                     "displayName": "Chart Type",
+                    "description": "Chart Type description.",
                     "type": {
                         "enumeration": [
                             {
+                                "displayNameKey": "Enum_CoreParameters_ChartType_Bar",
                                 "displayName": "Bar",
                                 "value": "Bar"
                             },
                             {
+                                "displayNameKey": "Enum_CoreParameters_ChartType_Line",
                                 "displayName": "Line",
                                 "value": "Line"
                             },
                             {
-                                "displayName": "Pie/Donut",
+                                "displayNameKey": "Enum_CoreParameters_ChartType_Pie",
+                                "displayName": "Pie",
                                 "value": "Pie"
                             },
                             {
+                                "displayNameKey": "Enum_CoreParameters_ChartType_XY",
                                 "displayName": "XY",
                                 "value": "XY"
                             }
@@ -44,31 +63,46 @@
                     }
                 },
                 "showTitle": {
+                    "displayNameKey": "Objects_CoreParameters_ShowTitle",
+                    "descriptionKey": "Objects_CoreParameters_ShowTitle_Description",
                     "displayName": "Show Title",
+                    "description": "Show Title description.",
                     "type": {
                         "bool": true
                     }
                 },
                 "titleText": {
+                    "displayNameKey": "Objects_CoreParameters_Title",
+                    "descriptionKey": "Objects_CoreParameters_Title_Description",
+                    "placeHolderTextKey": "Objects_CoreParameters_Title_Placeholder",
                     "displayName": "Title",
+                    "description": "Title description.",
+                    "placeHolderText": "Title placeholder.",
                     "type": {
                         "text": true
-                    },
-                    "placeHolderText": "Enter Title"
+                    }                    
                 },
                 "xLabel": {
+                    "displayNameKey": "Objects_CoreParameters_XLabel",
+                    "descriptionKey": "Objects_CoreParameters_XLabel_Description",
+                    "placeHolderTextKey": "Objects_CoreParameters_XLabel_Placeholder",
                     "displayName": "X-Label",
+                    "description": "X-Label description.",
+                    "placeHolderText": "X-Label placeholder.",
                     "type": {
                         "text": true
-                    },
-                    "placeHolderText": "Category"
+                    }                    
                 },
                 "yLabel": {
+                    "displayNameKey": "Objects_CoreParameters_XLabel",
+                    "descriptionKey": "Objects_CoreParameters_XLabel_Description",
+                    "placeHolderTextKey": "Objects_CoreParameters_XLabel_Placeholder",
                     "displayName": "Y-Label",
+                    "description": "Y-Label description.",
+                    "placeHolderText": "Y-Label placeholder.",
                     "type": {
                         "text": true
-                    },
-                    "placeHolderText": "Measure"
+                    }
                 }
             }
         },
@@ -128,22 +162,28 @@
                 "timeFormat": {
                     "displayNameKey": "Objects_ChartOptions_TimeFormat",
                     "descriptionKey": "Objects_ChartOptions_Timeformat_Description",
-                    "placeHolderTextKey": "",
+                    "placeHolderTextKey": "Objects_ChartOptions_Timeformat_Placeholder",
                     "displayName": "Time Format",
-                    "description": "time Format description.",
+                    "description": "Time Format description.",
                     "placeHolderText": "Valid dayjs time format",
                     "type": {
                         "text": true
                     }                    
                 },
                 "dotSize": {
+                    "displayNameKey": "Objects_ChartOptions_DotSize",
+                    "descriptionKey": "Objects_ChartOptions_DotSize_Description",
                     "displayName": "Dot Size",
+                    "description": "Dot Size description.",
                     "type": {
                         "integer": true
                     }
                 },
                 "innerPadding": {
-                    "displayName": "Inner Radius (%)",
+                    "displayNameKey": "Objects_ChartOptions_InnerRadius",
+                    "descriptionKey": "Objects_ChartOptions_InnerRadius_Description",
+                    "displayName": "Inner Radius",
+                    "description": "Inner Radius description.",
                     "type": {
                         "integer": true
                     }
