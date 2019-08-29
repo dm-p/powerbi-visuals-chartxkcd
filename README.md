@@ -11,7 +11,7 @@
 
 In August 2019, [chart.xkcd](https://github.com/timqian/chart.xkcd) was made available, which is a JavaScript library that provides a means to plot *“sketchy”, “cartoony” or “hand-drawn” styled charts*.
 
-This allows developers to use [JSON](https://www.json.org/) as a type of *"visualisation grammar"* to configure charts and then chart.xkcd will use this generate charts.
+This allows developers to use [JSON](https://www.json.org/) as a type of *"visualisation grammar"* to configure charts and then chart.xkcd will use this to generate charts.
 
 Being the enquiring sort that I am, I wondered, "can we put this in a custom visual..?"
 
@@ -20,7 +20,7 @@ Turns out we can. Should we? That's up to you!
 # What the Custom Visual Does
 
 * Provides feature parity with chart.xkcd version **1.0.10**. Including all bugs. chart.xkcd is in its early stages and a lot of things are still being worked out. Don't let that discourage you. It's great, and data can be fun as well as educational :)
-* Provides the Power BI user with access to all functionality via the properties pane and the right combination of fields.
+* Provides the Power BI user with access to all functionality via the **Properties** pane and the right combination of fields.
 * Probably has lots of bugs. Refer to [Support](#support) below for further details.
 
 # Installing the Visual
@@ -59,8 +59,8 @@ Select the **Chart Type** from the **Core Parameters** property menu. Supported 
 The visual has 3 data roles (or "field buckets"). Because each chart type has specific behaviour, the visual provides a "best-fit" for each configuration and each chart type will document the "correct" usage of these to produce desired results. A rule-of-thumb is as follows:
 
 * **Category (or X)** - represents the x-axis for cartesian charts, or the category for the Pie/Donut chart.
-* **Measures (or Y)** - represents the Y-Axis for cartesian charts or the share of the Pie/Donut chart. 
-* **Legend (Series)** - synonymous with the `data` attribute of the `dataset` object.
+* **Measures (or Y)** - represents the y-axis for cartesian charts or the share of the Pie/Donut chart. 
+* **Legend (Series)** - provides an opportunity to further catregorise line and XY charts with a different field.
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
 
