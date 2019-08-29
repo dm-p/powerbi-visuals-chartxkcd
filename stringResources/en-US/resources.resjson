@@ -1,10 +1,10 @@
 {
     "Roles_Category": "Category (or X)",
     "Roles_Category_Description": "Categorical or x-axis value to use for charts.",
-    "Measure_Category": "Measures (or Y)",
-    "Measure_Category_Description": "Measure or y-axis value(s) to use for charts.",
+    "Roles_Measure": "Measures (or Y)",
+    "Roles_Measure_Description": "Measure or y-axis value(s) to use for charts.",
     "Roles_Series": "Legend (Series)",
-    "Roles_Legend_Description": "Category to specify legend/series.",
+    "Roles_Series_Description": "Category to specify legend/series.",
     "Objects_CoreParameters": "Core Parameters",
     "Objects_CoreParameters_Description": "Properties and settings common to all chart.xkcd chart types.",
     "Objects_CoreParameters_ChartType": "Chart Type",
@@ -59,8 +59,9 @@
     "Enum_CoreParameters_ChartType_XY": "XY",
     "Visual_Test_Error_Heading": "Invalid Field Combination for Chart Type",
     "Visual_Test_Error_001": "There are not enough fields or measures added for the visual to render.",
-    "Visual_Test_Error_002": "The provided fields are not valid for the Bar chart type. Please supply: {ul}{li}1 Category and 1 Measure.{/li}{/ul}",
-    "Visual_Test_Error_003": "The provided fields are not valid for the Pie chart type. Please supply: {ul}{li}1 Category and 1 Measure.{/li}{/ul}",
-    "Visual_Test_Error_004": "The provided fields are not valid for the Line chart type. The following conditions must be met:{ul}{li}1 Category, 1 Measure and 1 Series{/li}{li}1 Category and 1+ Measures.{/li}{/ul}",
-    "Visual_Test_Error_005": "The provided fields are not valid for the XY chart type. The following conditions must be met:{ul}{li}1 Numeric/Date-based Category and 1+ Measures{/li}{/ul}"
+    "Visual_Test_Error_002": "The provided fields are not valid for the Bar chart type. Please supply: {ul}{li}1 Category field and 1 Measure.{/li}{/ul}",
+    "Visual_Test_Error_003": "The provided fields are not valid for the Pie chart type. Please supply: {ul}{li}1 Category field and 1 Measure.{/li}{/ul}",
+    "Visual_Test_Error_004": "The provided fields are not valid for the Line chart type. The following conditions must be met:{ul}{li}1 Category field, 1 Measure and 1 Legend field (Series){/li}{li}1 Category and 1 or more Measures.{/li}{/ul}",
+    "Visual_Test_Error_005": "The provided fields are not valid for the XY chart type. The following conditions must be met:{ul}{li}1 Numeric/Date-based Category field and 1 Measure{/li}{li}1 Numeric/Date-based Category field, 1 Measure and 1 Legend (Series) field{/li}{/ul}",
+    "Visual_Documentation_Link_Text": "View the documentation here"
 }
