@@ -19,7 +19,7 @@ Turns out we can. Should we? That's up to you!
 
 # What the Custom Visual Does
 
-* Provides feature parity with chart.xkcd version **1.0.9**. Including all bugs. chart.xkcd is in its early stages and a lot of things are still being worked out. Don't let that discourage you. It's great, and data can be fun as well as educational :)
+* Provides feature parity with chart.xkcd version **1.0.10**. Including all bugs. chart.xkcd is in its early stages and a lot of things are still being worked out. Don't let that discourage you. It's great, and data can be fun as well as educational :)
 * Provides the Power BI user with access to all functionality via the properties pane and the right combination of fields.
 * Probably has lots of bugs. Refer to [Support](#support) below for further details.
 
@@ -35,11 +35,11 @@ For now, you can download and install releases from this repository. You need to
 
 # Using the Visual
 
-As at this time the visual supports all types available in version 1.0.9 of chart.xkcd and their exposed properties. The visual exposes 3 property menus:
+As at this time the visual supports all types available in version 1.0.10 of chart.xkcd and their exposed properties. The visual exposes 3 property menus:
 
-* Core Parameters - allows selection of chart type and setting of parameters in the chart.xkcd spec that sit outside the chart-specific options.
-* Chart Options - provides properties that drive the chart-specific options.
-* About - provides version info (+ version of chart.xkcd packaged with the visual)
+* **Core Parameters** - allows selection of chart type and setting of parameters in the chart.xkcd spec that sit outside the chart-specific options.
+* **Chart Options** - provides properties that drive the chart-specific options.
+* **About** - provides version info (+ version of chart.xkcd packaged with the visual)
 
 ## Supported Chart Types
 
@@ -60,32 +60,15 @@ The visual has 3 data roles (field "buckets"). Because each chart type has speci
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
 
-Here are the valid combinations of daa roles for each chart type:
+Here are the valid combinations of data roles for each chart type:
 
-### Bar
+| Category | Measures  | Series | Bar   | Pie   | Line  | XY   |
+|----------|-----------|--------|:-----:|:-----:|:-----:|:----:|
+| 1        | 1         | 0      | ✔️    | ✔️   | ✔️   | ✔️*  |
+| 1        | 1         | 1      | ❌    | ❌   | ✔️   | ✔️*  |
+| 1        | 1 or more | 0      | ❌    | ❌   | ✔️   | ❌   |
 
-| Category | Measures | Series |
-|:--------:|:--------:|:------:|
-| 1        | 1        | 0      |
-
-### Pie
-
-| Category | Measures | Series |
-|:--------:|:--------:|:------:|
-| 1        | 1        | 0      |
-
-## Line
-
-| Category | Measures  | Series |
-|:--------:|:---------:|:------:|
-| 1        | 1 or more | 0      |
-| 1        | 1         | 1      |
-
-## XY
-
-| Category       | Measures | Series |
-|:--------------:|:--------:|:------:|
-| 1 Numeric/Date | 1        | 0 or 1 |
+\* For the XY chart, the **Category** must be defined in the Power BI data model as numeric or date/time.
 
 ## Core Parameters
 
