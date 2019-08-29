@@ -26,8 +26,10 @@
 
 /**
  * TODO: (general):
- *  - Add XY chart handling
- *  - XY: manage non-summarized category
+ *  - Update doc
+ *  - Update error messages
+ *  - Add help link to errors
+ *  - Turn off debugging
  */
 
  /** Power BI API references */
@@ -50,9 +52,8 @@
 
 /** Internal references */
     import { VisualDebugger } from './VisualDebugger';
-    import { IViewModel, IXkcdChartDataSetXY } from './interfaces';
+    import { IViewModel } from './interfaces';
     import { VisualSettings } from './settings';
-    import { EXYChartMappingType } from './enums';
 
     export class Visual implements IVisual {
 
@@ -217,7 +218,7 @@
                     debug.log('Test 1: Valid data view...');
                     if (!dataViews
                         || !dataViews[0]
-                        || !dataViews[0].matrix
+                        || !dataViews[0].table
                         || !dataViews[0].metadata
                     ) {
                         pushError('Visual_Test_Error_001');
@@ -228,10 +229,8 @@
 
                 /** Obtain data view objects so we can test for correct fields */
                     let metadata = dataViews[0].metadata.columns,
-                        matrix = dataViews[0].matrix,
-                        measures = matrix.valueSources.length > 0
-                            ?   matrix.valueSources.filter((m) => !m.roles.category)
-                            :   [this.getDataRoleByName(metadata, 'measure')] || null,
+                        table = dataViews[0].table,
+                        measures = metadata.filter((c) => c.roles.measure) || [],
                         measureCount = measures.filter((m) => m !== null).length,
                         category = this.getDataRoleByName(metadata, 'category'),
                         series = this.getDataRoleByName(metadata, 'series');
@@ -239,11 +238,9 @@
                         debug.log('Category', category);
                         debug.log('Series', series);
                         debug.log('Measures', measures, measureCount);
-                        debug.log('valueSources', matrix.valueSources.length);
 
                 /** Flags we can use in test 2 to define chart behaviour for spec */
-                    let isCartesian: boolean,
-                        xyMappingType: EXYChartMappingType;
+                    let isCartesian: boolean;
 
                 /** Test 2: Data view mapping matches requirements for chart type
                  *      Bar:    (1) 1 category and 1 measure; no series
@@ -306,32 +303,8 @@
                         case 'XY': {
                             isCartesian = true;
                             switch (true) {
-                                /** Numeric/date category, 1+ measures and no series */
-                                    case    (category.type.numeric || category.type.dateTime)
-                                        &&  (!series)
-                                        &&  (measureCount >= 1)
-                                        &&  (measures.filter((m) => m.isMeasure).length === measureCount): {
-                                            debug.log('Test 2: XY = CatMeasures');
-                                            xyMappingType = EXYChartMappingType.CatMeasures;
-                                            break;
-                                        }
-                                /** Numeric/date category, 1 measure and 1 series */
-                                    case    (category.type.numeric || category.type.dateTime)
-                                        &&  (series)
-                                        &&  (measureCount === 1)
-                                        &&  (measures.filter((m) => m.isMeasure).length === measureCount): {
-                                            debug.log('Test 2: XY = CatMeasureSeries');
-                                            xyMappingType = EXYChartMappingType.CatMeasureSeries;
-                                            break;
-                                        }
-                                /** Numeric/data category, 1 measure set to group, and group is numeric */
-                                    case    (category.type.numeric || category.type.dateTime)
-                                        &&  (!series)
-                                        &&  (measureCount === 1)
-                                        &&  (!measures[0].isMeasure)
-                                        &&  (measures[0].type.numeric): {
-                                            debug.log('Test 2: XY = CatMeasureCat');
-                                            xyMappingType = EXYChartMappingType.CatMeasureCat;
+                                    case    (category && measureCount === 1)
+                                        &&  (category.type.numeric || category.type.dateTime): {
                                             break;
                                         }
                                 default: {
@@ -430,7 +403,7 @@
                     /** Map data from `dataView` */
                         debug.log('Mapping data...');
                         let catLabels = chartConfig.chartType !== 'XY'
-                            ?   matrix.rows.root.children.map((c) => c.value.toString())
+                            ?   [...new Set(table.rows.map((r) => r[category.index].toString()))]
                             :   [];
                         switch (chartConfig.chartType) {
                             case 'Bar':
@@ -440,8 +413,8 @@
                                     labels: catLabels,
                                     datasets: [
                                         {
-                                            data: matrix.rows.root.children.map((c) => {
-                                                return <number>c.values[0].value;
+                                            data: table.rows.map((c) => {
+                                                return <number>c[measures[0].index];
                                             })
                                         }
                                     ]
@@ -453,64 +426,44 @@
                                 viewModel.spec.data = {
                                     labels: catLabels,
                                     datasets: series
-                                        ?   matrix.columns.root.children.map((c, ci) =>
-                                                ({
-                                                    label: c.value.toString(),
-                                                    data: matrix.rows.root.children.map((r) =>
-                                                            <number>r.values[ci].value
+                                            ?   [...new Set(table.rows.map((r) => r[series.index].toString()))].map((s) => ({
+                                                        label: s,
+                                                        data: table.rows.filter((r) => r[series.index].toString() === s).map((r) => 
+                                                            <number>r[measures[0].index]
+                                                        )
+                                                    })
+                                                )
+                                            :   measures.map((m) => ({
+                                                        label: m.displayName,
+                                                        data: table.rows.map((r) =>
+                                                            <number>r[m.index]
                                                         ).filter((d) => d !== null)
-                                                })
-                                            )
-                                        :   measures.map((m, mi) => ({
-                                                    label: m.displayName,
-                                                    data: matrix.rows.root.children.map((r) =>
-                                                        <number>r.values[mi].value
-                                                    ).filter((d) => d !== null)
-                                                })
-                                            )
+                                                    })
+                                                )
                                 };
                                 break;
                             }
                             case 'XY': {
                                 debug.log(`XY chart: mapping by category/measure/series...`);
-                                switch (xyMappingType) {
-                                    case EXYChartMappingType.CatMeasureSeries: {
-                                        debug.log('Mapping by series...');
-                                        viewModel.spec.data = {
-                                            datasets: matrix.columns.root.children.map((c, ci) =>
-                                                ({
-                                                    label: c.value.toString(),
-                                                    data: <IXkcdChartDataSetXY[]>matrix.rows.root.children.map((r) => ({
-                                                                x: <number>r.value,
-                                                                y: <number>r.values[ci].value
-                                                            })
-                                                        ).filter((d) => d.y !== null)
+                                viewModel.spec.data = {
+                                    datasets: series
+                                        ?   [...new Set(table.rows.map((r) => r[series.index].toString()))].map((s) => ({
+                                                    label: s,
+                                                    data: table.rows.filter((r) => r[series.index].toString() === s).map((r) => ({
+                                                            x: <number>r[category.index],
+                                                            y: <number>r[measures[0].index]
+                                                        })
+                                                    ).filter((d) => d !== null)
                                                 })
                                             )
-                                        };
-                                        break;
-                                    }
-                                    case EXYChartMappingType.CatMeasures: {
-                                        debug.log('Mapping by measures...');
-                                        viewModel.spec.data = {
-                                            datasets: measures.map((m, mi) =>
-                                                ({
-                                                    label: m.displayName,
-                                                    data: <IXkcdChartDataSetXY[]>matrix.rows.root.children.map((r) => ({
-                                                                x: <number>r.value,
-                                                                y: <number>r.values[mi].value
-                                                            })
-                                                        ).filter((d) => d.y !== null)
-                                                })
-                                            )
-                                        };
-                                        break;
-                                    }
-                                    case EXYChartMappingType.CatMeasureCat: {
-                                        debug.log('Mapping by category and categorical measure...');
-                                        /** TODO: This situation has cartesian product of category x measure in matrix.rows.root.children[].levelValues[] and will need to be grouped/managed */
-                                        break;
-                                    }
+                                        :   [{
+                                                label: `${category.displayName} / ${measures[0].displayName}`,
+                                                data: table.rows.map((r) => ({
+                                                            x: <number>r[category.index],
+                                                            y: <number>r[measures[0].index]
+                                                        })
+                                                    ).filter((d) => d !== null)
+                                            }]
                                 }
                                 break;
                             }

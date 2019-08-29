@@ -33,12 +33,3 @@
         downLeft = 3,
         downRight = 4
     }
-
-/**
- * Handles data mapping rules for XY chart
- */
-    export enum EXYChartMappingType {
-        CatMeasures = 0,
-        CatMeasureSeries = 1,
-        CatMeasureCat = 2
-    }

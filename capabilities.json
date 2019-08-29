@@ -265,19 +265,19 @@
                     } 
                 }
             ],
-            "matrix": {
+            "table": {
                 "rows": {
-                    "for": {
-                        "in": "category"
-                    }   
-                },
-                "columns": {
-                    "for": {
-                        "in": "series"
-                    }
-                },
-                "values": {
                     "select": [
+                        {
+                            "for": {
+                                "in": "category"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "series"
+                            }
+                        },
                         {
                             "for": {
                                 "in": "measure"
