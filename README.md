@@ -60,7 +60,7 @@ The visual has 3 data roles (or "field buckets"). Because each chart type has sp
 
 * **Category (or X)** - represents the x-axis for cartesian charts, or the category for the Pie/Donut chart.
 * **Measures (or Y)** - represents the y-axis for cartesian charts or the share of the Pie/Donut chart. 
-* **Legend (Series)** - provides an opportunity to further catregorise line and XY charts with a different field.
+* **Legend (Series)** - provides an opportunity to further categorise line and XY charts with a different field.
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
 
