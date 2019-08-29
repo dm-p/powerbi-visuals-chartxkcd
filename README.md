@@ -9,7 +9,7 @@
 
 # Overview
 
-In August 2019, Tim Qian released [chart.xkcd](https://github.com/timqian/chart.xkcd), which is a JavaScript library that provides a means to plot *“sketchy”, “cartoony” or “hand-drawn” styled charts*.
+In August 2019, [chart.xkcd](https://github.com/timqian/chart.xkcd) was made available, which is a JavaScript library that provides a means to plot *“sketchy”, “cartoony” or “hand-drawn” styled charts*.
 
 This allows developers to use [JSON](https://www.json.org/) as a type of *"visualisation grammar"* to configure charts and then chart.xkcd will use this generate charts.
 
@@ -25,17 +25,19 @@ Turns out we can. Should we? That's up to you!
 
 # Installing the Visual
 
-Due to the high-cadence of chart.xkcd's development and the somewhat experimental nature of the custom visual, the release and testing process employed by the AppSource Marketplace and the Power BI Custom Visuals team means that several releases may be available before an update gets published. If things stabilise in the future then this stance may change.
+Due to the high-cadence of chart.xkcd's development and the somewhat experimental nature of the custom visual, the release and testing process employed by the AppSource Marketplace and the Power BI Custom Visuals team means that several updates may be made to either the visual or chart.xkcd before an update eventually gets published. If things stabilise in the future then this stance may change.
 
-For now, you can download and install releases from this repository. You need to either [install the `.pbiviz` file manually](https://docs.microsoft.com/en-us/power-bi/power-bi-custom-visuals#import-a-custom-visual-from-a-file) into your reports, or you can use the [organizational custom visuals capabilities of your tenant](https://docs.microsoft.com/en-us/power-bi/power-bi-custom-visuals-organization) if you wish to inflict this on everyone. You might really want to rethink this option if it seems like a good idea.
+For now, you can download and install releases from this repository. You need to either [install the `.pbiviz` file manually](https://docs.microsoft.com/en-us/power-bi/power-bi-custom-visuals#import-a-custom-visual-from-a-file) into your reports, or you can use the [organizational custom visuals capabilities of your tenant](https://docs.microsoft.com/en-us/power-bi/power-bi-custom-visuals-organization) if you wish to inflict this on everyone. **You might really want to rethink this option if it seems like a good idea**.
+
+**Please be careful when installing custom visuals from unknown or unsolicited sources**. I can assure you that [my intentions are honourable](#privacy-policy) but you should exercise caution around your data. If you have any doubts, then work with your admins to ensure that all the necessary checks and balances are carried out.
 
 | Version | Direct Download | Release Notes |
 |---------|-----------------|---------------|
-| 1.0.0.0 | [1.0.0.0.pbiviz](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/download/1.0.0.0/chartXkcd32FC84B3628540DDAA713E329738A6A0.1.0.0.0.pbiviz) | [Read more](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/tag/1.0.0.0) |
+| 1.0.0.0 | [1.0.0.0.pbiviz](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/download/1.0.0.0/chartXkcdForPowerBI.1.0.0.0.pbiviz) | [Read more](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/tag/1.0.0.0) |
 
 # Using the Visual
 
-As at this time the visual supports all types available in version 1.0.10 of chart.xkcd and their exposed properties. The visual exposes 3 property menus:
+As at this time the visual supports all types available in version 1.0.10 of chart.xkcd and their available configuration. The visual exposes 3 property menus for the creator:
 
 * **Core Parameters** - allows selection of chart type and setting of parameters in the chart.xkcd spec that sit outside the chart-specific options.
 * **Chart Options** - provides properties that drive the chart-specific options.
@@ -50,12 +52,14 @@ Select the **Chart Type** from the **Core Parameters** property menu. Supported 
 * [Line Chart](https://timqian.com/chart.xkcd/#line_chart)
 * [XY Chart](https://timqian.com/chart.xkcd/#xy_chart)
 
+(links go to the chart.xkcd documentation)
+
 ## Data Roles (Fields)
 
-The visual has 3 data roles (field "buckets"). Because each chart type has specific behaviour, the visual provides a "best-fit" for each configuration and each chart type will document the "correct" usage of these to produce desired results. A rule-of-thumb is as follows:
+The visual has 3 data roles (or "field buckets"). Because each chart type has specific behaviour, the visual provides a "best-fit" for each configuration and each chart type will document the "correct" usage of these to produce desired results. A rule-of-thumb is as follows:
 
-* **Category (or X)** - synonymous with the `data.labels` part of the chart.xkcd specification, or the `x` attribute of the XY chart.
-* **Measures (or Y)** - synonymous with the `data` attribute of the `dataset` object. Effectively the Y-Axis for a cartesian chart or the share of the Pie/Donut chart. 
+* **Category (or X)** - represents the x-axis for cartesian charts, or the category for the Pie/Donut chart.
+* **Measures (or Y)** - represents the Y-Axis for cartesian charts or the share of the Pie/Donut chart. 
 * **Legend (Series)** - synonymous with the `data` attribute of the `dataset` object.
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
@@ -72,7 +76,7 @@ Here are the valid combinations of data roles for each chart type:
 
 ## Core Parameters
 
-Core Parameters properties will be available as follows:
+*Core Parameters* properties will be available to the visual for the following chart types:
 
 | Property   | Purpose                                                  | Bar   | Pie/Donut   | Line   | XY   |
 |------------|----------------------------------------------------------|:-----:|:-----------:|:------:|:----:|
@@ -83,7 +87,7 @@ Core Parameters properties will be available as follows:
 
 ## Chart Options
 
-Chart Options properties will be available as follows:
+*Chart Options* properties will be available to the visual for the following chart types::
 
 | Property        | Purpose                                                                                                                                                                                    | Bar   | Pie/Donut   | Line   | XY   |
 |-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----:|:-----------:|:------:|:----:|
@@ -91,7 +95,7 @@ Chart Options properties will be available as follows:
 | Y Tick Count    | The number of ticks to display on the y-axis.                                                                                                                                              | ✔️    | ❌         | ️️✔️     | ✔️  |
 | Legend Position | Specifies where to place the legend.                                                                                                                                                       | ❌    | ️️✔️         | ✔️     | ✔️  |
 | Show Line       | Specifies whether lines should be connected with a line.                                                                                                                                   | ❌    | ❌         | ❌     | ✔️  |
-| Time Format     | When the Category is Date/Time, you can provide use a [valid dayjs format specification](https://github.com/iamkun/dayjs/blob/dev/docs/en/Plugin.md#customparseformat) to format the axis. | ❌    | ❌         | ❌     | ✔️  |
+| Time Format     | When the Category is Date/Time, you can provide a [valid dayjs format specification](https://github.com/iamkun/dayjs/blob/dev/docs/en/Plugin.md#customparseformat) to format the axis. | ❌    | ❌         | ❌     | ✔️  |
 | Dot Size        | Specifies size of the dots in the XY plot.                                                                                                                                                 | ❌    | ❌         | ❌     | ✔️  |
 | Inner Radius    | The radius of the chart (in %). Set this to 0% for a pie chart.                                                                                                                            | ❌    | ✔️         | ❌     | ❌  |
 
@@ -103,9 +107,9 @@ chart.xkcd is similarly-licensed and run, although [Tim has a Patreon](https://w
 
 If there are bugs, then it's a good question as to whether they exist in chart.xkcd, or this custom visual's ability to drive it. Feel free to create issues and I will investigate when I can, advise accordingly (and possibly pass over the fence to the chart.xkcd project if needed).
 
-This was an exercise for me in how the custom visual framework can drive another charting library, and there's some fun stuff going on under the hood. Some of the conditions that handle mapping into the view model are not optimal and will need to be revisited, I'm sure.
+Personally, this was an exercise for me in how the Custom Visuals SDK can drive another charting library, and there's some fun stuff going on under the hood. Some of the conditions that handle mapping into the view model are not optimal and will need to be revisited, I'm sure.
 
-If you wish to learn more about how dataRoles and dataViewMappings work, as well as the code required to make a workable view model, then feel free to check-out, review and ask any questions. I'll do my best to answer them.
+If you wish to learn more about how `dataRoles` and `dataViewMappings` work, as well as the code required to make a workable view model, then feel free to check-out, review and ask any questions. I'll do my best to answer them. I'd be happy if the visual can educate potential developers, as well as entertain ;)
 
 # Privacy Policy
 
