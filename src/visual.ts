@@ -24,14 +24,6 @@
 *  THE SOFTWARE.
 */
 
-/**
- * TODO: (general):
- *  - Update doc
- *  - Update error messages
- *  - Add help link to errors
- *  - Turn off debugging
- */
-
  /** Power BI API references */
     import 'core-js/stable';
     import './../style/visual.less';
@@ -45,6 +37,7 @@
     import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnumerationObject;
     import DataViewMetadataColumn = powerbi.DataViewMetadataColumn;
     import ILocalizationManager = powerbi.extensibility.ILocalizationManager;
+    import IVisualHost = powerbi.extensibility.visual.IVisualHost;
 
 /** External dependencies */
     import * as d3 from 'd3';
@@ -54,6 +47,7 @@
     import { VisualDebugger } from './VisualDebugger';
     import { IViewModel } from './interfaces';
     import { VisualSettings } from './settings';
+    import { VISUAL_USAGE_URL } from './constants';
 
     export class Visual implements IVisual {
 
@@ -67,6 +61,8 @@
             private settings: VisualSettings;
         /** Handle localisation of visual text */
             private localisationManager: ILocalizationManager;
+        /** Visual host from constructor */
+            private host: IVisualHost;
 
         /**
          * Runs when visual is instantiated
@@ -76,6 +72,7 @@
             constructor(options: VisualConstructorOptions) {
                 console.log('Visual constructor', options);
                 this.localisationManager = options.host.createLocalizationManager();
+                this.host = options.host;
                 this.customVisualContainer = options.element;
                 this.plotErrorContainer = d3.select(this.customVisualContainer)
                     .append('div')
@@ -158,6 +155,18 @@
                                 .enter()
                                 .append('div')
                                 .html((d) => `<p>${d.replace(/{(\/?ul|\/?li)}/gi, '<$1>')}</p>`);
+
+                        /** Doc link */
+                            this.plotErrorContainer
+                                .append('div')
+                                    .classed('documentationResource', true)
+                                .append('a')
+                                    .attr('href', '#')
+                                    .text(this.localisationManager.getDisplayName('Visual_Documentation_Link_Text'))
+                                    .on('click', (d) => {
+                                        d3.event.preventDefault;
+                                        this.host.launchUrl(VISUAL_USAGE_URL);
+                                    });
                     }
 
                 /** That's all, folks! */
@@ -428,7 +437,7 @@
                                     datasets: series
                                             ?   [...new Set(table.rows.map((r) => r[series.index].toString()))].map((s) => ({
                                                         label: s,
-                                                        data: table.rows.filter((r) => r[series.index].toString() === s).map((r) => 
+                                                        data: table.rows.filter((r) => r[series.index].toString() === s).map((r) =>
                                                             <number>r[measures[0].index]
                                                         )
                                                     })
@@ -464,7 +473,7 @@
                                                         })
                                                     ).filter((d) => d !== null)
                                             }]
-                                }
+                                };
                                 break;
                             }
                         }
@@ -495,6 +504,7 @@
 
                         case 'about' : {
                             /** Version should always show the default */
+                                instances[0].properties['visualName'] = VisualSettings.getDefault()['about'].visualName;    
                                 instances[0].properties['version'] = VisualSettings.getDefault()['about'].version;
                                 instances[0].properties['chartXkcdVersion'] = VisualSettings.getDefault()['about'].chartXkcdVersion;
 
