@@ -60,6 +60,33 @@ The visual has 3 data roles (field "buckets"). Because each chart type has speci
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
 
+Here are the valid combinations of daa roles for each chart type:
+
+### Bar
+
+| Category | Measures | Series |
+|:--------:|:--------:|:------:|
+| 1        | 1        | 0      |
+
+### Pie
+
+| Category | Measures | Series |
+|:--------:|:--------:|:------:|
+| 1        | 1        | 0      |
+
+## Line
+
+| Category | Measures  | Series |
+|:--------:|:---------:|:------:|
+| 1        | 1 or more | 0      |
+| 1        | 1         | 1      |
+
+## XY
+
+| Category       | Measures | Series |
+|:--------------:|:--------:|:------:|
+| 1 Numeric/Date | 1        | 0 or 1 |
+
 ## Core Parameters
 
 Core Parameters properties will be available as follows:
