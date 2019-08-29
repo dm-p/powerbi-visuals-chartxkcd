@@ -533,97 +533,105 @@
                 const instances: VisualObjectInstance[] = (VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options) as VisualObjectInstanceEnumerationObject).instances;
                 let objectName = options.objectName;
 
-                switch (objectName) {
+                /** Initial debugging for properties update */
+                    let debug = new VisualDebugger(this.settings.about.debugMode && this.settings.about.debugProperties);
+                    debug.heading(`Properties: ${objectName}`);
 
-                    case 'about' : {
-                        /** Version should always show the default */
-                            instances[0].properties['version'] = VisualSettings.getDefault()['about'].version;
-                            instances[0].properties['chartXkcdVersion'] = VisualSettings.getDefault()['about'].chartXkcdVersion;
+                /** Apply instance-specific transformations */
+                    switch (objectName) {
 
-                        /** Switch off and hide debug mode if development flag is disabled */
-                            if (!this.settings.about.development) {
-                                delete instances[0].properties['debugMode'];
-                                delete instances[0].properties['debugVisualUpdate'];
-                                delete instances[0].properties['debugProperties'];
-                            }
+                        case 'about' : {
+                            /** Version should always show the default */
+                                instances[0].properties['version'] = VisualSettings.getDefault()['about'].version;
+                                instances[0].properties['chartXkcdVersion'] = VisualSettings.getDefault()['about'].chartXkcdVersion;
 
-                        /** Reset the individual flags if debug mode switched off */
-                            if (!this.settings.about.debugMode) {
-                                this.settings.about.debugVisualUpdate = false;
-                                this.settings.about.debugProperties = false;
-                                delete instances[0].properties['debugVisualUpdate'];
-                                delete instances[0].properties['debugTooltipEvents'];
-                                delete instances[0].properties['debugProperties'];
-                            }
-                            break;
-                    }
+                            /** Switch off and hide debug mode if development flag is disabled */
+                                if (!this.settings.about.development) {
+                                    delete instances[0].properties['debugMode'];
+                                    delete instances[0].properties['debugVisualUpdate'];
+                                    delete instances[0].properties['debugProperties'];
+                                }
 
-                    case 'coreParameters': {
-                        if (!this.settings.coreParameters.showTitle) {
-                            delete instances[0].properties['titleText'];
+                            /** Reset the individual flags if debug mode switched off */
+                                if (!this.settings.about.debugMode) {
+                                    this.settings.about.debugVisualUpdate = false;
+                                    this.settings.about.debugProperties = false;
+                                    delete instances[0].properties['debugVisualUpdate'];
+                                    delete instances[0].properties['debugTooltipEvents'];
+                                    delete instances[0].properties['debugProperties'];
+                                }
+                                break;
                         }
-                        switch (this.settings.coreParameters.chartType) {
-                            case 'Pie': {
-                                delete instances[0].properties['xLabel'];
-                                delete instances[0].properties['yLabel'];
-                            }
-                            break;
+
+                        case 'coreParameters': {
+                            /** Only show title text if we've opted to enable it */
+                                if (!this.settings.coreParameters.showTitle) {
+                                    delete instances[0].properties['titleText'];
+                                }
+
+                            /** Hide x/y labels if non-cartesian chart */
+                                switch (this.settings.coreParameters.chartType) {
+                                    case 'Pie': {
+                                        delete instances[0].properties['xLabel'];
+                                        delete instances[0].properties['yLabel'];
+                                    }
+                                    break;
+                                }
+                                break;
                         }
-                        break;
+
+                        case 'chartOptions': {
+                            /** Range validation on int fields */
+                                instances[0].validValues = instances[0].validValues || {};
+                                instances[0].validValues.xTickCount =
+                                instances[0].validValues.yTickCount =
+                                instances[0].validValues.dotSize = {
+                                    numberRange: {
+                                        min: 0,
+                                        max: 10
+                                    }
+                                };
+                                instances[0].validValues.innerPadding = {
+                                    numberRange: {
+                                        min: 0,
+                                        max: 100
+                                    }
+                                };
+
+                            /** Remove chart-type-specific options */
+                                switch (this.settings.coreParameters.chartType) {
+                                    case 'Bar': {
+                                        delete instances[0].properties['xTickCount'];
+                                        delete instances[0].properties['legendPosition'];
+                                        delete instances[0].properties['innerPadding'];
+                                        delete instances[0].properties['showLine'];
+                                        delete instances[0].properties['timeFormat'];
+                                        delete instances[0].properties['dotSize'];
+                                        break;
+                                    }
+                                    case 'Pie': {
+                                        delete instances[0].properties['xTickCount'];
+                                        delete instances[0].properties['yTickCount'];
+                                        delete instances[0].properties['showLine'];
+                                        delete instances[0].properties['timeFormat'];
+                                        delete instances[0].properties['dotSize'];
+                                        break;
+                                    }
+                                    case 'Line': {
+                                        delete instances[0].properties['xTickCount'];
+                                        delete instances[0].properties['innerPadding'];
+                                        delete instances[0].properties['showLine'];
+                                        delete instances[0].properties['timeFormat'];
+                                        delete instances[0].properties['dotSize'];
+                                        break;
+                                    }
+                                    case 'XY': {
+                                        delete instances[0].properties['innerPadding'];
+                                    }
+                                }
+                        }
+
                     }
-
-                    case 'chartOptions': {
-                        /** Range validation on int fields */
-                            instances[0].validValues = instances[0].validValues || {};
-                            instances[0].validValues.xTickCount =
-                            instances[0].validValues.yTickCount =
-                            instances[0].validValues.dotSize = {
-                                numberRange: {
-                                    min: 0,
-                                    max: 10
-                                }
-                            };
-                            instances[0].validValues.innerPadding = {
-                                numberRange: {
-                                    min: 0,
-                                    max: 100
-                                }
-                            };
-
-                        /** Remove chart-type-specific options */
-                            switch (this.settings.coreParameters.chartType) {
-                                case 'Bar': {
-                                    delete instances[0].properties['xTickCount'];
-                                    delete instances[0].properties['legendPosition'];
-                                    delete instances[0].properties['innerPadding'];
-                                    delete instances[0].properties['showLine'];
-                                    delete instances[0].properties['timeFormat'];
-                                    delete instances[0].properties['dotSize'];
-                                    break;
-                                }
-                                case 'Pie': {
-                                    delete instances[0].properties['xTickCount'];
-                                    delete instances[0].properties['yTickCount'];
-                                    delete instances[0].properties['showLine'];
-                                    delete instances[0].properties['timeFormat'];
-                                    delete instances[0].properties['dotSize'];
-                                    break;
-                                }
-                                case 'Line': {
-                                    delete instances[0].properties['xTickCount'];
-                                    delete instances[0].properties['innerPadding'];
-                                    delete instances[0].properties['showLine'];
-                                    delete instances[0].properties['timeFormat'];
-                                    delete instances[0].properties['dotSize'];
-                                    break;
-                                }
-                                case 'XY': {
-                                    delete instances[0].properties['innerPadding'];
-                                }
-                            }
-                    }
-
-                }
 
                 return instances;
             }
