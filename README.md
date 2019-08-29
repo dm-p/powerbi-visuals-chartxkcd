@@ -1,4 +1,4 @@
-![chart.xkcd for Power BI](assets/main_logo_small.png)
+![chart.xkcd for Power BI](doc/images/main_logo_small.png)
 
 * [Overview](#overview)
 * [What the Custom Visual Does](#what-the-custom-visual-does)
@@ -54,9 +54,9 @@ Select the **Chart Type** from the **Core Parameters** property menu. Supported 
 
 The visual has 3 data roles (field "buckets"). Because each chart type has specific behaviour, the visual provides a "best-fit" for each configuration and each chart type will document the "correct" usage of these to produce desired results. A rule-of-thumb is as follows:
 
-* **Category (Labels)** - synonymous with the `data.labels` part of the chart.xkcd specification, or the `x` attribute of the XY chart.
-* **Measures (Datasets.Data)** - synonymous with the `data` attribute of the `dataset` object. Effectively the Y-Axis for a cartesian chart or the share of the Pie/Donut chart. 
-* **Legend** - synonymous with the `data` attribute of the `dataset` object.
+* **Category (or X)** - synonymous with the `data.labels` part of the chart.xkcd specification, or the `x` attribute of the XY chart.
+* **Measures (or Y)** - synonymous with the `data` attribute of the `dataset` object. Effectively the Y-Axis for a cartesian chart or the share of the Pie/Donut chart. 
+* **Legend (Series)** - synonymous with the `data` attribute of the `dataset` object.
 
 If the selected **Chart Type** doesn't support the combination of fields, you *should* get a message confirming this. If you don't get a chart *or* a message then you've found a bug!
 
@@ -71,22 +71,32 @@ Core Parameters properties will be available as follows:
 | X-Label    | Label for X-Axis. Defaults to **Category** if empty      |  ✔️   | ❌         | ✔️     | ✔️  |
 | Y-Label    | Label for Y-Axis. Defaults to first **Measure** if empty |  ✔️   | ❌         | ✔️     | ✔️  |
 
+## Chart Options
+
+Chart Options properties will be available as follows:
+
+| Property        | Purpose                                                                                                                                                                                    | Bar   | Pie/Donut   | Line   | XY   |
+|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----:|:-----------:|:------:|:----:|
+| X Tick Count    | The number of ticks to display on the x-axis.                                                                                                                                              | ❌    | ❌         | ❌     | ✔️  |
+| Y Tick Count    | The number of ticks to display on the y-axis.                                                                                                                                              | ✔️    | ❌         | ️️✔️     | ✔️  |
+| Legend Position | Specifies where to place the legend.                                                                                                                                                       | ❌    | ️️✔️         | ✔️     | ✔️  |
+| Show Line       | Specifies whether lines should be connected with a line.                                                                                                                                   | ❌    | ❌         | ❌     | ✔️  |
+| Time Format     | When the Category is Date/Time, you can provide use a [valid dayjs format specification](https://github.com/iamkun/dayjs/blob/dev/docs/en/Plugin.md#customparseformat) to format the axis. | ❌    | ❌         | ❌     | ✔️  |
+| Dot Size        | Specifies size of the dots in the XY plot.                                                                                                                                                 | ❌    | ❌         | ❌     | ✔️  |
+| Inner Radius    | The radius of the chart (in %). Set this to 0% for a pie chart.                                                                                                                            | ❌    | ✔️         | ❌     | ❌  |
+
 # Support
 
-The visual is an MIT-licensed open source project, provided "as-is" and funded entirely by my enthusiasm. 
+The visual is an MIT-licensed open source project, provided "as-is" and funded entirely by my free time and my enthusiasm. 
 
 chart.xkcd is similarly-licensed and run, although [Tim has a Patreon](https://www.patreon.com/timqian) if you appreciate his work and want to support the development of chart.xkcd.
 
 If there are bugs, then it's a good question as to whether they exist in chart.xkcd, or this custom visual's ability to drive it. Feel free to create issues and I will investigate when I can, advise accordingly (and possibly pass over the fence to the chart.xkcd project if needed).
 
-This was an exercise for me in how the custom visual framework can drive another charting library
+This was an exercise for me in how the custom visual framework can drive another charting library, and there's some fun stuff going on under the hood. Some of the conditions that handle mapping into the view model are not optimal and will need to be revisited, I'm sure.
+
+If you wish to learn more about how dataRoles and dataViewMappings work, as well as the code required to make a workable view model, then feel free to check-out, review and ask any questions. I'll do my best to answer them.
 
 # Privacy Policy
 
-## Work by the Author to Implement in Power BI
-
-The Power BI Custom Visuals SDK does not collect your data. Data is accessed from the dataset for display purposes only.
-
-## chart.xkcd
-
-chart.xkcd does not have an explicit privacy policy at this time. I have observed that version 1.0.9 does not collect data but would advise that if you have concerns about this then this can be discussed in their project. I have requested details and will advise accordingly if I hear anything further.
+This visual does not collect your data. Data is accessed for display purposes only.
