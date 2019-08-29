@@ -73,29 +73,43 @@
             }
         },
         "chartOptions": {
+            "displayNameKey": "Objects_ChartOptions",
+            "descriptionKey": "Objects_ChartOptions_Description",
             "displayName": "Chart Options",
+            "description": "Chart Options description.",
             "properties": {
                 "xTickCount": {
+                    "displayNameKey": "Objects_ChartOptions_XTickCount",
+                    "descriptionKey": "Objects_ChartOptions_XTickCount_Description",
                     "displayName": "X Tick Count",
+                    "description": "X Tick Count description.",
                     "type": {
                         "integer": true
                     }
                 },
                 "yTickCount": {
+                    "displayNameKey": "Objects_ChartOptions_YTickCount",
+                    "descriptionKey": "Objects_ChartOptions_YTickCount_Description",
                     "displayName": "Y Tick Count",
+                    "description": "Y Tick Count description.",
                     "type": {
                         "integer": true
                     }
                 },
                 "legendPosition": {
+                    "displayNameKey": "Objects_ChartOptions_LegendPosition",
+                    "descriptionKey": "Objects_ChartOptions_LegendPosition_Description",
                     "displayName": "Legend Position",
+                    "description": "Legend Position description.",
                     "type": {
                         "enumeration": [
                             {
+                                "displayNameKey": "Enum_General_Position_UpLeft",
                                 "displayName": "Up Left",
                                 "value": "1"
                             },
                             {
+                                "displayNameKey": "Enum_General_Position_UpRight",
                                 "displayName": "Up Right",
                                 "value": "2"
                             }
@@ -103,17 +117,24 @@
                     }
                 },
                 "showLine": {
+                    "displayNameKey": "Objects_ChartOptions_ShowLine",
+                    "descriptionKey": "Objects_ChartOptions_ShowLine_Description",
                     "displayName": "Show Line",
+                    "description": "Show Line description.",
                     "type": {
                         "bool": true
                     }
                 },
                 "timeFormat": {
+                    "displayNameKey": "Objects_ChartOptions_TimeFormat",
+                    "descriptionKey": "Objects_ChartOptions_Timeformat_Description",
+                    "placeHolderTextKey": "",
                     "displayName": "Time Format",
+                    "description": "time Format description.",
+                    "placeHolderText": "Valid dayjs time format",
                     "type": {
                         "text": true
-                    },
-                    "placeHolderText": "Valid dayjs time format"
+                    }                    
                 },
                 "dotSize": {
                     "displayName": "Dot Size",
