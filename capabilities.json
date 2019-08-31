@@ -94,8 +94,8 @@
                     }                    
                 },
                 "yLabel": {
-                    "displayNameKey": "Objects_CoreParameters_XLabel",
-                    "descriptionKey": "Objects_CoreParameters_XLabel_Description",
+                    "displayNameKey": "Objects_CoreParameters_YLabel",
+                    "descriptionKey": "Objects_CoreParameters_YLabel_Description",
                     "placeHolderTextKey": "Objects_CoreParameters_XLabel_Placeholder",
                     "displayName": "Y-Label",
                     "description": "Y-Label description.",
