@@ -363,7 +363,10 @@
                                 legendPosition = this.settings.chartOptions.legendPosition || 1,
                                 showLine = this.settings.chartOptions.showLine,
                                 timeFormat = this.settings.chartOptions.timeFormat,
-                                dotSize = this.settings.chartOptions.dotSize || VisualSettings.getDefault()['chartOptions'].dotSize,
+                                dotSize = this.settings.chartOptions.dotSize === 0
+                                        ?   0
+                                        :       this.settings.chartOptions.dotSize    
+                                            || VisualSettings.getDefault()['chartOptions'].dotSize,
                                 innerRadius = (
                                         this.settings.chartOptions.innerPadding === 0
                                             ?   0
