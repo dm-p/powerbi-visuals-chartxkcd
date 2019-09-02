@@ -31,9 +31,10 @@ For now, you can download and install releases from this repository. You need to
 
 **Please be careful when installing custom visuals from unknown or unsolicited sources**. I can assure you that [my intentions are honourable](#privacy-policy) but you should exercise caution around your data. If you have any doubts, then work with your admins to ensure that all the necessary checks and balances are carried out.
 
-| Version | Direct Download | Release Notes |
-|---------|-----------------|---------------|
-| 1.0.0.0 | [1.0.0.0.pbiviz](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/download/1.0.0.0/chartXkcdForPowerBI.1.0.0.0.pbiviz) | [Read more](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/tag/1.0.0.0) |
+| Version | Direct Download | Release Notes | Sample Workbook |
+|---------|-----------------|---------------|-----------------|
+| 1.0.1.1 | [1.0.1.1.pbiviz](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/download/1.0.1.1/chartXkcdForPowerBI.1.0.1.1.pbiviz) | [Read more](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/tag/1.0.1.1) | [Link](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/download/1.0.1.1/chart.xkcd-for-Power-BI-Sample-Workbook.1.0.1.1.pbix) |
+| 1.0.0.0 | [1.0.0.0.pbiviz](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/download/1.0.0.0/chartXkcdForPowerBI.1.0.0.0.pbiviz) | [Read more](https://github.com/dm-p/powerbi-visuals-chartxkcd/releases/tag/1.0.0.0) | N/A |
 
 # Using the Visual
 
